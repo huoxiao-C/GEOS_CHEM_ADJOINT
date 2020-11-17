@@ -1,0 +1,225 @@
+#!/bin/bash
+
+#delete log
+rm gcadj.log*
+
+true=1
+false=0
+lfirst=$true
+
+startymdHM="20171001 0000"
+endymdHM="20190101 0000"
+
+startymdHMts=`date -d "$startymdHM" +%s`
+endymdHMts=`date -d "$endymdHM" +%s`
+
+echo $startymdHMts
+echo $endymdHMts
+
+cp  GEOSRestart/initial_GEOSChem_rst.2x25_CO2.20171001.nc GEOSRestart/initial_GEOSChem_rst.2x25_CO2.nc
+cp  GEOSRestart/initial_GEOSChem_rst.2x25_CO2.20171001.nc GEOSRestart/initial_GEOSChem_rst.2x25_CO2_background.nc
+cp FdCo2Out/GEOSChem.SpeciesConc.20171001_0000z.bac.nc4 FdCo2Out/GEOSChem.SpeciesConc.20171001_0000z.nc4
+
+MAXITE=30
+itenum=1
+
+tot_ite=1
+lics=0
+bec=0
+#wrf4dvar=0
+python_bin='/home/huoxiao/application/anaconda3/envs/esmpy/bin/python'
+while [ $startymdHMts -lt $endymdHMts ]
+do
+    
+      #initial file
+      if [ $lfirst -eq $false ];then
+
+      echo "begin ${begin_day}  ${lfirst}"
+      ini_file_time_format=$(date -d "$startymdHM" +"%Y%m%d_%H%M")
+      cp FdCo2Out/GEOSChem.Restart.$(date -d "$startymdHM" +"%Y%m%d_%H%M")z.nc4 GEOSRestart/initial_GEOSChem_rst.2x25_CO2.nc
+      echo FdCo2Out/GEOSChem.Restart.$(date -d "$startymdHM" +"%Y%m%d_%H%M")z.nc4
+      ln -sf ~/GEOS_FP/GEOS_FP_ADJOINT/data/GEOSCHEM_RESTARTS/v2018-11/initial_GEOSChem_rst.2x25_CO2.nc GEOSChem.Restart.$(date -d "$startymdHM" +"%Y%m%d_%H%M")z.nc4 
+      cp FdCo2Out/GEOSChem.Restart.$(date -d "$startymdHM" +"%Y%m%d_%H%M")z.nc4 GEOSRestart/initial_GEOSChem_rst.2x25_CO2_background.nc
+      fi
+     
+      begin_datestr="Start YYYYMMDD, hhmmss  : ${startymdHM}00"
+      endymdHM=$(date -d "$startymdHM +6 hour" +"%Y%m%d %H%M")
+      end_datestr="End   YYYYMMDD, hhmmss  : ${endymdHM}00"
+      echo $begin_datestr
+      echo $end_datestr
+      sed -i "3c${begin_datestr}" input.geos 
+      sed -i "4c${end_datestr}" input.geos
+    #initial file
+      echo "${tot_ite}" > TOT_ITER      
+      if [ $bec -eq $true ];then
+         echo 'generate background error covariance'
+         year=`(echo ${startymdHM:0:4})`
+         month=`(echo ${startymdHM:4:2})`
+         day=`(echo ${startymdHM:6:2})`
+         hour=`(echo ${startymdHM:9:2})`
+         #conda activate esmpy
+         $python_bin CodeDir/Adjoint/script/background_error_covariance.py $year $month $day $hour
+      fi
+#      if [ $itenum -lt 400 ];then
+       echo 0 > FGEOS
+      
+       logi=`echo "scale=0; ${tot_ite}/120" | bc` 
+       for out_ite in {1..1}
+       do
+           echo OUTER, $out_ite
+           echo $out_ite > OUT_ITER
+           ./gcadj.sh >> gcadj.log$logi
+           if [ $lics -eq $true ];then
+           filename=`(ls -rt gctm.w* |  tail -1)`
+           cp $filename  WRF4DVAR/gctm.w.$(printf "%02d" $out_ite) 
+           fi
+#             cp cfn.$(printf "%02d" $X) cost_function/cfn.${tot_ite}.$(printf "%02d" $X)
+       done
+#      ./geos  #>> gcadj.log1
+       if [ $lics -eq $true ];then
+            echo 1 > FGEOS
+            for time_window in {1..6}
+            do
+               spc_time_ith=$((time_window-1))
+               spc_time_str=$(date -d "$startymdHM +${spc_time_ith} hour" +"%Y%m%d %H%M")
+               cp FdCo2Out/GEOSChem.SpeciesConc.${spc_time_str:0:8}_${spc_time_str:9:4}z.nc4 PERTD_GC/
+            done
+            ./gcadj.sh >> gcadj.log${logi}
+#             X=`(cat N_CALC)`
+#             cp cfn.$(printf "%02d" $X) cost_function/cfn.${tot_ite}.$(printf "%02d" $X)
+#             cp cfnjo.$(printf "%02d" $X) cost_function/cfnjo.${tot_ite}.$(printf "%02d" $X)
+        fi
+
+#      elif [ $itenum -lt 800 ]; then
+
+#      echo 0 > FGEOS
+#      ./gcadj.sh >> gcadj.log2
+#      for out_ite in {1..1}
+#      do
+#         echo OUTER, $out_ite
+#         echo $out_ite > OUT_ITER
+#         ./gcadj.sh >> gcadj.log2
+#         if [ $lics -eq $true ]; then
+#            filename=`(ls -rt gctm.w* |  tail -1)`
+#           cp $filename  WRF4DVAR/gctm.w.$(printf "%02d" $out_ite)
+#             cp cfn.$(printf "%02d" $X) cost_function/cfn.${tot_ite}.$(printf "%02d" $X)
+#         fi
+#      done
+
+#      if [ $lics -eq $true ];then
+#           echo 1 > FGEOS
+#           for time_window in {1..6}
+#           do
+#              spc_time_ith=$((time_window-1))
+#              spc_time_str=$(date -d "$startymdHM +${spc_time_ith} hour" +"%Y%m%d %H%M")
+#              cp FdCo2Out/GEOSChem.SpeciesConc.${spc_time_str:0:8}_${spc_time_str:9:4}z.nc4 PERTD_GC/
+#           done
+#           ./gcadj.sh >> gcadj.log2
+#             X=`(cat N_CALC)`
+#             cp cfn.$(printf "%02d" $X) cost_function/cfn.${tot_ite}.$(printf "%02d" $X)
+#             cp cfnjo.$(printf "%02d" $X) cost_function/cfnjo.${tot_ite}.$(printf "%02d" $X)
+#       fi
+
+#      elif [ $itenum -lt 1200 ]; then
+
+#      echo 0 > FGEOS
+#      ./gcadj.sh >> gcadj.log3
+#      for out_ite in {1..1}
+#      do
+#          echo OUTER, $out_ite
+#          echo $out_ite > OUT_ITER
+#          ./gcadj.sh >> gcadj.log3
+#          if [ $lics -eq $true ]; then
+#             filename=`(ls -rt gctm.w* |  tail -1)`
+#             cp $filename  WRF4DVAR/gctm.w.$(printf "%02d" $out_ite)
+#             cp cfn.$(printf "%02d" $X) cost_function/cfn.${tot_ite}.$(printf "%02d" $X)
+#          fi
+#      done
+
+#      if [ $lics -eq $true ];then
+#           echo 1 > FGEOS
+#           for time_window in {1..6}
+#           do
+#                 spc_time_ith=$((time_window-1))
+#                 spc_time_str=$(date -d "$startymdHM +${spc_time_ith} hour" +"%Y%m%d %H%M")
+#                 cp FdCo2Out/GEOSChem.SpeciesConc.${spc_time_str:0:8}_${spc_time_str:9:4}z.nc4 PERTD_GC/
+#           done
+#           ./gcadj.sh >> gcadj.log3
+#             X=`(cat N_CALC)`
+#             cp cfn.$(printf "%02d" $X) cost_function/cfn.${tot_ite}.$(printf "%02d" $X)
+#             cp cfnjo.$(printf "%02d" $X) cost_function/cfnjo.${tot_ite}.$(printf "%02d" $X)
+#      fi
+
+#      elif [ $itenum -lt 1600 ]; then
+
+#      echo 0 > FGEOS
+#      ./gcadj.sh >> gcadj.log4
+#      for out_ite in {1..1}
+#      do
+#          echo OUTER, $out_ite
+#          echo $out_ite > OUT_ITER
+#          ./gcadj.sh >> gcadj.log4
+#          if [ $lics -eq 1 ]; then
+#             filename=`(ls -rt gctm.w* |  tail -1)`
+#             cp $filename  WRF4DVAR/gctm.w.$(printf "%02d" $out_ite)
+#             cp cfn.$(printf "%02d" $X) cost_function/cfn.${tot_ite}.$(printf "%02d" $X)
+#          fi
+#      done
+
+#      if [ $lics -eq $true ];then
+#           echo 1 > FGEOS
+#           for time_window in {1..6}
+#           do
+#                 spc_time_ith=$((time_window-1))
+#                 spc_time_str=$(date -d "$startymdHM +${spc_time_ith} hour" +"%Y%m%d %H%M")
+#                 cp FdCo2Out/GEOSChem.SpeciesConc.${spc_time_str:0:8}_${spc_time_str:9:4}z.nc4 PERTD_GC/
+#           done
+#           ./gcadj.sh >> gcadj.log4
+#             X=`(cat N_CALC)`
+#             cp cfn.$(printf "%02d" $X) cost_function/cfn.${tot_ite}.$(printf "%02d" $X)
+#             cp cfnjo.$(printf "%02d" $X) cost_function/cfnjo.${tot_ite}.$(printf "%02d" $X)
+#      fi
+
+#      else
+
+#      echo 0 > FGEOS
+#      ./gcadj.sh >> gcadj.log5
+#      for out_ite in {1..1}
+#      do
+#          echo OUTER, $out_ite
+#          echo $out_ite > OUT_ITER
+#          ./gcadj.sh >> gcadj.log5
+#          if [ $lics -eq $true ]; then
+#             filename=`(ls -rt gctm.w* |  tail -1)`
+#             cp $filename  WRF4DVAR/gctm.w.$(printf "%02d" $out_ite)
+#          fi
+#             cp cfn.$(printf "%02d" $X) cost_function/cfn.${tot_ite}.$(printf "%02d" $X)
+#      done
+
+#      if [ $lics -eq $true ];then
+#           echo 1 > FGEOS
+#           for time_window in {1..6}
+#           do
+#               spc_time_ith=$((time_window-1))
+#               spc_time_str=$(date -d "$startymdHM +${spc_time_ith} hour" +"%Y%m%d %H%M")
+#               cp FdCo2Out/GEOSChem.SpeciesConc.${spc_time_str:0:8}_${spc_time_str:9:4}z.nc4 PERTD_GC/
+#           done
+#          ./gcadj.sh >> gcadj.log5
+#             X=`(cat N_CALC)`
+#             cp cfn.$(printf "%02d" $X) cost_function/cfn.${tot_ite}.$(printf "%02d" $X)
+#             cp cfnjo.$(printf "%02d" $X) cost_function/cfnjo.${tot_ite}.$(printf "%02d" $X)
+#      fi
+
+#      fi
+ 
+#      if [ `cat ITER` -ge $MAXITE ]; then
+#         echo 'exceed max iter number'
+#         break
+#      fi
+      lfirst=$false
+      startymdHM=$endymdHM
+      startymdHMts=`date -d "$startymdHM" +%s`
+      itenum=$((itenum+1))
+      tot_ite=$((tot_ite+1))
+done
+
