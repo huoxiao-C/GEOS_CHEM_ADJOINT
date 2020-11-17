@@ -1,0 +1,27 @@
+make[1]: Entering directory '/home/huoxiao/GEOS_CHEM/rundirs/merra2_2x25_CO2'
+LAST BUILD INFORMATION:
+  CODE_DIR     : ./CodeDir
+  CODE_BRANCH  : master
+  LAST_COMMIT  : Update to GEOS-Chem 12.6.3 (to keep pace with GCHP 12.6.3) 
+  COMMIT_DATE  : Mon Nov 25 10:53:03 2019 -0500 
+  VERSION      : 12.6.0
+  VERSION_TAG  : GC_12.6.0
+  TRACEBACK    : y
+  BOUNDS       : n
+  DEBUG        : n
+  FPE          : n
+  OMP          : y
+  CHEM         : Standard
+  TOMAS12      : n
+  TOMAS15      : n
+  TOMAS30      : n
+  TOMAS40      : n
+  APM          : n
+  RRTMG        : n
+  MASSCONS     : n
+  TIMERS       : 0
+  TAU_PROF     : n
+  BPCH_DIAG    : y
+  COMPILER     : gfortran 20160609
+  Datetime     : 2020/05/21 14:30	
+make[1]: Leaving directory '/home/huoxiao/GEOS_CHEM/rundirs/merra2_2x25_CO2'
