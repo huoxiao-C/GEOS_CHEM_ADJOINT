@@ -1,0 +1,33 @@
+      MODULE LOGICAL_ADJ_MOD
+      IMPLICIT NONE
+
+      !=================================================================
+      ! MODULE VARIABLES
+      !=================================================================
+
+      LOGICAL, PARAMETER :: LADJ        = .TRUE.
+      LOGICAL, PARAMETER :: LADJ_EMS    = .TRUE.
+      LOGICAL, PARAMETER :: LICS        = .FALSE.
+      LOGICAL, PARAMETER :: LICS_INC    = .FALSE.
+      LOGICAL, PARAMETER :: LSENS       = .FALSE.
+      LOGICAL, PARAMETER :: LOBS_SENS   = .FALSE.
+      LOGICAL, PARAMETER :: LCONV_ADJ   = .TRUE.
+      LOGICAL, PARAMETER :: LTRAN_ADJ   = .TRUE.
+      LOGICAL, PARAMETER :: LPBL_ADJ    = .TRUE.
+      LOGICAL, PARAMETER :: LPBL_D      = .TRUE.
+      LOGICAL, PARAMETER :: LCONV_D     = .TRUE.
+      LOGICAL, PARAMETER :: LTRAN_D     = .TRUE.
+      LOGICAL, PARAMETER :: LTURB       = .TRUE.
+
+      LOGICAL, PARAMETER :: FINITE_DIFF = .FALSE.
+      LOGICAL, PARAMETER :: LCONV_FINITE_DIFF = .FALSE.
+      LOGICAL, PARAMETER :: LTRAN_FINITE_DIFF = .FALSE.
+      LOGICAL, PARAMETER :: LFORWARD_RUN = .FALSE.
+
+
+      LOGICAL, PARAMETER :: LADJ_FEMISS  = .FALSE.
+      LOGICAL, PARAMETER :: LADJ_FOSSIL = .FALSE.
+      LOGICAL, PARAMETER :: LADJ_OCEAN = .FALSE.
+      LOGICAL, PARAMETER :: LADJ_BIO = .TRUE.
+      LOGICAL, PARAMETER :: LADJ_BIOFUEL = .FALSE.
+      END MODULE LOGICAL_ADJ_MOD

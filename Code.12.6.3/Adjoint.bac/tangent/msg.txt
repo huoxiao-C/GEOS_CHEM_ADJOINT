@@ -1,0 +1,82 @@
+1 (DF05) External routine null, called by (do_cloud_convection), is assumed default In:.. and Out:.1
+2 do_cloud_convection: (DD27) do_cloud_convection contains FORTRAN90 feature
+3 do_cloud_convection: (DD15) Module cmn_size_mod is not defined
+4 do_cloud_convection: (DD15) Module depo_mercury_mod is not defined
+5 do_cloud_convection: (DD15) Module depo_mercury_mod is not defined
+6 do_cloud_convection: (DD15) Module depo_mercury_mod is not defined
+7 do_cloud_convection: (DD15) Module errcode_mod is not defined
+8 do_cloud_convection: (DD15) Module error_mod is not defined
+9 do_cloud_convection: (DD15) Module error_mod is not defined
+10 do_cloud_convection: (DD15) Module input_opt_mod is not defined
+11 do_cloud_convection: (DD15) Module physconstants is not defined
+12 do_cloud_convection: (DD15) Module state_chm_mod is not defined
+13 do_cloud_convection: (DD15) Module state_diag_mod is not defined
+14 do_cloud_convection: (DD15) Module state_grid_mod is not defined
+15 do_cloud_convection: (DD15) Module state_met_mod is not defined
+16 do_cloud_convection: (DD15) Module species_mod is not defined
+17 do_cloud_convection: (DD15) Module wetscav_mod is not defined
+18 do_cloud_convection: (DD15) Module wetscav_mod is not defined
+19 do_cloud_convection: (DD15) Module wetscav_mod is not defined
+20 do_cloud_convection: (TC62) Undeclared type: optinput
+21 do_cloud_convection: (TC62) Undeclared type: grdstate
+22 do_cloud_convection: (TC62) Undeclared type: metstate
+23 do_cloud_convection: (TC62) Undeclared type: chmstate
+24 do_cloud_convection: (TC62) Undeclared type: dgnstate
+25 do_cloud_convection: (TC03) Expression is expected to be a record, and is here grdstate
+26 do_cloud_convection: (TC03) Expression is expected to be a record, and is here grdstate
+27 do_cloud_convection: (TC62) Undeclared type: species
+28 do_cloud_convection: (TC16) Type mismatch in assignment: INTEGER receives REAL
+29 do_cloud_convection: (TC03) Expression is expected to be a record, and is here metstate
+30 do_cloud_convection: (TC03) Expression is expected to be a record, and is here metstate
+31 do_cloud_convection: (TC03) Expression is expected to be a record, and is here grdstate
+32 do_cloud_convection: (TC13) Triplet element is expected to be numeric, and is here REAL
+33 do_cloud_convection: (TC03) Expression is expected to be a record, and is here metstate
+34 do_cloud_convection: (TC03) Expression is expected to be a record, and is here metstate
+35 do_cloud_convection: (TC03) Expression is expected to be a record, and is here metstate
+36 do_cloud_convection: (TC03) Expression is expected to be a record, and is here metstate
+37 do_cloud_convection: (TC03) Expression is expected to be a record, and is here metstate
+38 do_cloud_convection: (TC03) Expression is expected to be a record, and is here chmstate
+39 do_cloud_convection: (TC03) Expression is expected to be a record, and is here chmstate
+40 do_cloud_convection: (TC05) Expression co2_con is expected to be an array, and is here REAL*fp
+41 do_cloud_convection: (TC33) External procedure null is not declared
+42 do_cloud_convection: (TC37) Return type of function null set by implicit rule to INTEGER
+43 do_cloud_convection: (TC16) Type mismatch in pointer assignment: species POINTER receives INTEGER
+44 do_cloud_convection: (TC03) Expression is expected to be a record, and is here metstate
+45 do_cloud_convection: (TC03) Expression is expected to be a record, and is here grdstate
+46 do_cloud_convection: (TC13) Triplet element is expected to be numeric, and is here REAL
+47 do_cloud_convection: (TC03) Expression is expected to be a record, and is here metstate
+48 do_cloud_convection: (TC03) Expression is expected to be a record, and is here grdstate
+49 do_cloud_convection: (TC13) Triplet element is expected to be numeric, and is here REAL
+50 do_cloud_convection: (TC03) Expression is expected to be a record, and is here grdstate
+51 do_cloud_convection: (TC03) Expression is expected to be a record, and is here chmstate
+52 do_cloud_convection: (TC16) Type mismatch in assignment: INTEGER receives REAL*fp
+53 do_cloud_convection: (TC03) Expression is expected to be a record, and is here optinput
+54 do_cloud_convection: (TC03) Expression is expected to be a record, and is here chmstate
+55 do_cloud_convection: (TC03) Expression is expected to be a record, and is here chmstate
+56 do_cloud_convection: (TC45) No field named info in derived TYPE  UNNAMED
+57 do_cloud_convection: (TC03) Expression is expected to be a record, and is here species
+58 do_cloud_convection: (TC16) Type mismatch in assignment: REAL*fp receives REAL*fp(*,*)
+59 do_cloud_convection: (TC16) Type mismatch in pointer assignment: species POINTER receives INTEGER
+60 do_cloud_convection: (TC16) Type mismatch in assignment: INTEGER receives REAL
+61 do_cloud_convection: (DF03) variable gc_success is used before initialized
+62 do_cloud_convection: (DF03) expression *dqrcu[k] is undefined
+63 do_cloud_convection: (DF03) expression *pflcu[k] is undefined
+64 do_cloud_convection: (DF03) expression *pficu[k] is undefined
+65 do_cloud_convection: (DF03) expression *delp_dry[k] is undefined
+66 do_cloud_convection: (DF03) variable g0_100 is used before initialized
+67 do_cloud_convection: (DF03) expression *spcinfo.wetdepid is undefined
+68 do_cloud_convection: (DF03) expression *cmfmc[cldbase-1] is undefined
+69 do_cloud_convection: (DF03) expression *delp_dry[k] is undefined
+70 do_cloud_convection: (DF03) expression *delp_dry[k] is undefined
+71 do_cloud_convection: (DF03) expression *cmfmc[cldbase-1] is undefined
+72 do_cloud_convection: (DF03) expression *cmfmc[cldbase-1] is undefined
+73 do_cloud_convection: (DF03) expression *cmfmc[k-1] is undefined
+74 do_cloud_convection: (DF03) expression *cmfmc[k] is undefined
+75 do_cloud_convection: (DF03) expression *dtrain[k] is undefined
+76 do_cloud_convection: (DF03) expression *cmfmc[k] is undefined
+77 do_cloud_convection: (DF03) expression *cmfmc[k] is undefined
+78 do_cloud_convection: (DF03) variable t0 is used before initialized
+79 do_cloud_convection: (DF03) expression *cmfmc[k] is undefined
+80 do_cloud_convection: (DF03) expression *cmfmc[k] is undefined
+81 do_cloud_convection: (DF03) expression *cmfmc[k] is undefined
+82 do_cloud_convection: (DF03) variable gc_success is used before initialized
